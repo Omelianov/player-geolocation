@@ -13,3 +13,11 @@ button {
  font-size: 16px;
  cursor: pointer;
 }
+
+#startButton {
+ background: rgb(34, 138, 23);
+}
+
+#stopButton {
+ background: rgb(183, 43, 22);
+}
