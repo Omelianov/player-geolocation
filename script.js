@@ -1,24 +1,34 @@
 let watchId;
 let trackingInterval;
+let map;
+
+function initMap() {
+  map = L.map('map').setView([0, 0], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+}
 
 function startTracking() {
   const startButton = document.getElementById('startButton');
   startButton.disabled = true;
+
   if ('geolocation' in navigator) {
     const coordinatesElement = document.getElementById('coordinateValues');
 
-    // Опции для первоначального запроса watchPosition
     const initialOptions = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
 
     watchId = navigator.geolocation.watchPosition(
       (position) => {
-        const { latitude, longitude } = position.coords;
-        console.log('New Location:', latitude, longitude);
+        if (watchId) { // Добавим проверку перед выполнением запросов
+          const { latitude, longitude } = position.coords;
+          console.log('New Location:', latitude, longitude);
 
-        // Обновляем текст в поле координат
-        coordinatesElement.textContent = `${latitude}, ${longitude}`;
+          coordinatesElement.textContent = `${latitude}, ${longitude}`;
 
-        // Здесь вы можете отправить данные на сервер через WebSocket или другим способом
+          const playerLocation = new L.LatLng(latitude, longitude);
+          map.panTo(playerLocation);
+        }
       },
       (error) => {
         handleGeolocationError(error, 'Initial geolocation request');
@@ -26,27 +36,29 @@ function startTracking() {
       initialOptions
     );
 
-    // Устанавливаем интервал обновления геолокации каждые 3 секунды
     trackingInterval = setInterval(() => {
-      // Опции для обновленного запроса getCurrentPosition
-      const updateOptions = { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 };
+      if (watchId) { // Добавим проверку перед выполнением запросов
+        const updateOptions = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
 
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          console.log('Updated Location:', latitude, longitude);
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            if (watchId) { // Добавим проверку перед выполнением запросов
+              const { latitude, longitude } = position.coords;
+              console.log('Updated Location:', latitude, longitude);
 
-          // Обновляем текст в поле координат
-          coordinatesElement.textContent = `${latitude}, ${longitude}`;
+              coordinatesElement.textContent = `${latitude}, ${longitude}`;
 
-          // Здесь также вы можете отправить данные на сервер
-        },
-        (error) => {
-          handleGeolocationError(error, 'Updated geolocation request');
-        },
-        updateOptions
-      );
-    }, 5000);
+              const playerLocation = new L.LatLng(latitude, longitude);
+              map.panTo(playerLocation);
+            }
+          },
+          (error) => {
+            handleGeolocationError(error, 'Updated geolocation request');
+          },
+          updateOptions
+        );
+      }
+    }, 3000);
   } else {
     console.error('Geolocation is not supported');
   }
@@ -55,12 +67,15 @@ function startTracking() {
 function stopTracking() {
   const startButton = document.getElementById('startButton');
   startButton.disabled = false;
+
   if (watchId) {
     navigator.geolocation.clearWatch(watchId);
-    clearInterval(trackingInterval); // Очищаем интервал при остановке отслеживания
+    clearInterval(trackingInterval);
+    watchId = null; // Установим watchId в null, чтобы указать, что трекинг остановлен
     console.log('Tracking stopped');
   }
 }
+
 
 function handleGeolocationError(error, context) {
   if (error.code === 3) {
