@@ -1,26 +1,43 @@
 let watchId;
 let trackingInterval;
 let map;
-let customMarker; // Добавим переменную для хранения маркера
+let customMarker; // Add variable to store the marker
 
 // Custom marker icon
 const customIcon = L.divIcon({
-  className: 'custom-marker'
+  className: 'custom-marker',
 });
 
-// Initialize the map using Leaflet
 function initMap() {
   map = L.map('map').setView([0, 0], 14);
 
-  // Add OpenStreetMap layer
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors',
-  }).addTo(map);
+  // OpenStreetMap layer (main layer)
+  const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  });
 
-  // Добавим маркер с начальными координатами
+  // OpenTopoMap layer (topographic map)
+  const topoLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenTopoMap contributors'
+  });
+
+  // Add layers to the map
+  osmLayer.addTo(map);
+  topoLayer.addTo(map);
+
+  // Create a layer control
+  const baseLayers = {
+    'OpenStreetMap': osmLayer,
+    'OpenTopoMap': topoLayer,
+  };
+
+  L.control.layers(baseLayers).addTo(map);
+
+  // Add a marker with initial coordinates
   const initialCoords = [0, 0];
   customMarker = L.marker(initialCoords, { icon: customIcon }).addTo(map);
 }
+
 
 // Function to start tracking
 function startTracking() {

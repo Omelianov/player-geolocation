@@ -48,8 +48,9 @@ button {
 
 /* Styles for marker */
 .custom-marker {
- background-color: #028a0d; /* Marker background color */
- padding: 2px 8px 2px 2px;
+ background-color: #028a0e; /* Marker background color */
+ color: #fff; /* Marker text color */
+ padding: 2px;
  border-radius: 50%; /* Circular marker */
  text-align: center;
  font-size: 12px;
@@ -73,6 +74,6 @@ button {
  width: auto !important;
 }
 
-h1 {
- color: #333;
+.leaflet-popup {
+ left: -21px !important;
 }
