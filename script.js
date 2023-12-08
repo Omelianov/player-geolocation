@@ -2,6 +2,8 @@ let watchId;
 let trackingInterval;
 
 function startTracking() {
+  const startButton = document.getElementById('startButton');
+  startButton.disabled = true;
   if ('geolocation' in navigator) {
     const coordinatesElement = document.getElementById('coordinateValues');
 
@@ -44,13 +46,15 @@ function startTracking() {
         },
         updateOptions
       );
-    }, 3000);
+    }, 5000);
   } else {
     console.error('Geolocation is not supported');
   }
 }
 
 function stopTracking() {
+  const startButton = document.getElementById('startButton');
+  startButton.disabled = false;
   if (watchId) {
     navigator.geolocation.clearWatch(watchId);
     clearInterval(trackingInterval); // Очищаем интервал при остановке отслеживания
