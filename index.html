@@ -4,18 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Player Geolocation</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="styles.css" />
+  <!-- Include the Leaflet CSS and JS files -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Include the Leaflet.label CSS and JS files -->
+  <link
+   rel="stylesheet"
+   href="https://unpkg.com/leaflet.label/dist/leaflet.label.css"
+  />
  </head>
  <body onload="initMap()">
   <h1>Player Geolocation</h1>
+
+  <div id="text-input">
+   <label for="markerText">Enter Your Погоняло:</label>
+   <input type="text" id="markerText" />
+   <button id="updateButton" onclick="updateMarkerText()">
+    Update Your Погоняло
+   </button>
+  </div>
+
   <button id="startButton" onclick="startTracking()">Start Tracking</button>
   <button id="stopButton" onclick="stopTracking()">Stop Tracking</button>
+
   <div id="coordinates">Coordinates: <span id="coordinateValues"></span></div>
 
-  <div id="map" style="height: 400px; width: 100%"></div>
+  <div id="map"></div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="script.js"></script>
  </body>
 </html>

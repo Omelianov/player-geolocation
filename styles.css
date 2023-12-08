@@ -12,6 +12,11 @@ button {
  padding: 8px;
  font-size: 16px;
  cursor: pointer;
+ border-radius: 5px;
+}
+
+#updateButton {
+ background-color: rgb(244, 215, 179);
 }
 
 #startButton {
@@ -20,4 +25,54 @@ button {
 
 #stopButton {
  background: rgb(183, 43, 22);
+}
+
+#map {
+ height: 60vh;
+ width: 100%;
+ max-height: 500px;
+ margin: 0 auto;
+}
+
+#text-input {
+ margin-top: 10px;
+}
+
+#text-input label {
+ margin-right: 10px;
+}
+
+#text-input input {
+ margin-right: 10px;
+}
+
+/* Styles for marker */
+.custom-marker {
+ background-color: #028a0d; /* Marker background color */
+ padding: 2px 8px 2px 2px;
+ border-radius: 50%; /* Circular marker */
+ text-align: center;
+ font-size: 12px;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+ background: #ffffffc0 !important;
+}
+
+.element.style {
+ min-width: 10px !important;
+}
+
+.leaflet-popup-content {
+ margin: 2px 18px 2px 5px !important;
+ text-align: center;
+}
+
+.leaflet-popup-content[style*="width:"] {
+ width: auto !important;
+}
+
+h1 {
+ color: #333;
 }
