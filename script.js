@@ -1,7 +1,7 @@
 let watchId;
 let trackingInterval;
 let map;
-let customMarker; // Add variable to store the marker
+let customMarker;
 
 // Custom marker icon
 const customIcon = L.divIcon({
@@ -38,17 +38,24 @@ function initMap() {
   customMarker = L.marker(initialCoords, { icon: customIcon }).addTo(map);
 }
 
-
 // Function to start tracking
 function startTracking() {
   const startButton = document.getElementById('startButton');
   startButton.disabled = true;
+  stopButton.disabled = false;
 
   if ('geolocation' in navigator) {
     const coordinatesElement = document.getElementById('coordinateValues');
 
     // Options for the initial watchPosition request
     const initialOptions = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
+
+    // Stop current watchPosition if it exists
+    if (watchId) {
+      navigator.geolocation.clearWatch(watchId);
+      clearInterval(trackingInterval);
+      console.log('Previous tracking stopped');
+    }
 
     // Start watching position
     watchId = navigator.geolocation.watchPosition(
@@ -106,12 +113,15 @@ function startTracking() {
 function stopTracking() {
   const startButton = document.getElementById('startButton');
   startButton.disabled = false;
+  stopButton.disabled = true;
 
   if (watchId) {
     // Clear the geolocation watch and tracking interval
     navigator.geolocation.clearWatch(watchId);
     clearInterval(trackingInterval);
     console.log('Tracking stopped');
+    watchId = null;
+    trackingInterval = null;
   }
 }
 
